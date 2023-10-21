@@ -5,46 +5,51 @@ let apellido = prompt("INGRESE SU APELLIDO")
 let edad = parseInt(prompt("ingrese su edad"))
 
 if (nombre != "" && apellido != " " && edad >= 18) {
-    alert(`Gracias por su registro ${nombre} ${apellido}, ahora puede seleccionar la pelicula`)
+    alert(`Gracias por su registro ${nombre} ${apellido}, ahora puede navegar`)
 } else {
     alert("Debe ser mayor de edad para registrarse")
 }
 
 
-const valor = 500
-let pelicula = prompt(`elija su pelicula con un numero:
- 1: Titanic
- 2: Troya
- 3: Red Social
- 4: Avengers
- `)
 
-switch (pelicula) {
-    case "1":
-        console.log(`vas a ver Titanic, el precio por entrada es de ${valor}`)
-        break
-    case "2":
-        console.log(`vas a ver Troya, el precio por entrada es de ${valor}`)
-        break
-    case "3":
-        console.log(`vas a ver Red Social, el precio por entrada es de ${valor}`)
-        break
-    case "4":
-        alert(`vas a ver Avengers, el precio por entrada es ${valor}`)
-    default:
-        console.log("actualmente no estan disponible esta opcion")
-        break;
-}
+const carrito = [
+    { nombre: "Placa de video RTX2060", precio: 1000 },
+    { nombre: "Monitor 144hz", precio: 2000 },
+    { nombre: "Teclado Red dragon", precio: 3000 },
+    { nombre: "Mouse Logitech", precio: 4000 }
+]
+
+let total = carrito.reduce((accum, p) => {
+    return accum + p.precio
+}, 0)
+
+console.log(total)
+
+const direccion = document.querySelector(".direccion")
+
+const nuevaCard = document.createElement(`div`)
+
+nuevaCard.innerHTML= (`<div class="card-body">
+    <h5 class="card-title">MemoriaRam 8ghz</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+        card's
+        content.</p>
+    <a href="#" class="btn btn-primary">Añadir al carrito</a>
+</div>`)
+
+direccion.insertBefore(nuevaCard, direccion[1])
 
 
-let cantidadEntradas = parseInt(prompt("Ingrese la cantidad de entradas"))
-let precio = cantidadEntradas
+const carrito2 = ["Placa de video RTX2060", "Monitor 144hz", "Teclado RedDragon", "Mouse Logitech"]
 
-while (cantidadEntradas == precio) {
-    let resultado = cantidadEntradas * valor
-    alert("su valor es " + resultado)
-    cantidadEntradas++
-}
+carrito2.push("MemoriaRam 8ghz")
+
+console.log(carrito2)
+
+
+
+
+
 
 
 
