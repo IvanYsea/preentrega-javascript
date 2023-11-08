@@ -44,7 +44,7 @@ let carro = {
 
 
 
-localStorage.setItem("Usuario", JSON.stringify(carro) )
+// localStorage.setItem("Usuario", JSON.stringify(carro) )
 
 // const carroLocal = localStorage.getItem("Usuario")
 
