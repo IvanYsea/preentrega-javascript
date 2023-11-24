@@ -1,112 +1,157 @@
-// alert("necesita estar registrado")
+const btnCart = document.querySelector(".container-cart-icon");
+const containerCartProducts = document.querySelector(
+  ".container-cart-products"
+);
 
-// let nombre = prompt("INGRESE SU NOMBRE")
-// let apellido = prompt("INGRESE SU APELLIDO")
-// let edad = parseInt(prompt("ingrese su edad"))
-
-// if (nombre != "" && apellido != " " && edad >= 18) {
-//     alert(`Gracias por su registro ${nombre} ${apellido}, ahora puede navegar`)
-// } else {
-//     alert("Debe ser mayor de edad para registrarse")
-// }
+btnCart.addEventListener("click", () => {
+  containerCartProducts.classList.toggle("hidden-cart");
+});
 
 
-const form = document.querySelector("form")
-const nombre = document.querySelector(".input-field")
-const contraseña = document.querySelector(".input-fielda")
-
-form.addEventListener("submit", registro)
-
-function registro (e) {
-    e.preventDefault()
-    console.log(`nombre: ${nombre.value}`)
-    console.log(`contraseña: ${contraseña.value}`)
-}
+const cartInfo = document.querySelector(".cart-product");
+const rowProduct = document.querySelector(".row-product");
 
 
+const productsList = document.querySelector(".container-items");
 
 
-const carrito = [
-    {id:1, nombre: "Placa de video RTX2060", precio: 1000 },
-    {id:2, nombre: "Monitor 144hz", precio: 2000 },
-    {id:3, nombre: "Teclado Red dragon", precio: 3000 },
-    {id:4, nombre: "Mouse Logitech", precio: 4000 },
-    {id:5, nombre: "MemoriaRam 8ghz", precio: 5000 }
-]
+let allProducts = [];
 
+const valorTotal = document.querySelector(".total-pagar");
 
-let carro = {
-    total: 0,
-    entries: [
+const countProducts = document.querySelector("#contador-productos");
 
-    ]
-}
+const cartEmpty = document.querySelector(".cart-empty");
+const cartTotal = document.querySelector(".cart-total");
 
+productsList.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-add-cart")) {
+    const product = e.target.parentElement;
 
+    // Swal.fire({
+    //   position: "top-end",
+    //   icon: "success",
+    //   title: "Your work has been saved",
+    //   showConfirmButton: false,
+    //   timer: 1500
+    // });
 
-// localStorage.setItem("Usuario", JSON.stringify(carro) )
+    Toastify({
+      text: "Producto Agregado",
+      duration: 3000,
+      className: "info",
+      position: "left",
+      style: {
+        background: "#00b09b",
+      }
+    }).showToast();
 
-// const carroLocal = localStorage.getItem("Usuario")
+    const infoProduct = {
+      quantity: 1,
+      title: product.querySelector("h2").textContent,
+      price: product.querySelector("p").textContent,
+    };
 
-// const carroObj = JSON.parse(carroLocal)
-
-// console.log(carroObj)
-
-
-const add = (id) => {
-    
-    const found = carrito.find(obj=>obj.id===id)
-    carro.entries.push(found)
-    let precios = carro.entries.map(obj => obj.precio)
-    carro.total = precios.reduce(
-        (accum, suma) => accum + suma,
-        0,
+    const exits = allProducts.some(
+      (product) => product.title === infoProduct.title
     );
-console.log(carro)
-localStorage.setItem("Usuario", JSON.stringify(carro) )
-}
 
-const producto1 = document.querySelector(".producto-1").addEventListener("click", ()=>add(1) )
-const producto2 = document.querySelector(".producto-2").addEventListener("click", ()=>add(2) )
-const producto3 = document.querySelector(".producto-3").addEventListener("click", ()=>add(3) )
-const producto4 = document.querySelector(".producto-4").addEventListener("click", ()=>add(4) )
-// const producto5 = document.querySelector(".producto-5").addEventListener("click", ()=>add(5) )
+    if (exits) {
+      const products = allProducts.map((product) => {
+        if (product.title === infoProduct.title) {
+          product.quantity++;
+          return product;
+        } else {
+          return product;
+        }
+      });
+      allProducts = [...products];
+    } else {
+      allProducts = [...allProducts, infoProduct];
+    }
+
+    showHTML();
+    localStorage.setItem("Usuario", JSON.stringify(allProducts) )
+  }
+});
+
+rowProduct.addEventListener("click", (e) => {
+  if (e.target.classList.contains("icon-close")) {
+
+    const product = e.target.parentElement;
+    const title = product.querySelector("p").textContent;
+
+    allProducts = allProducts.filter((product) => product.title !== title);
+
+    Toastify({
+      text: "Producto Eliminado",
+      duration: 3000,
+      className: "info",
+      position: "left",
+      style: {
+        background: "red",
+      }
+    }).showToast();
+
+    console.log(allProducts);
+
+    showHTML();
+  }
+});
 
 
+const showHTML = () => {
+  if (!allProducts.length) {
+    cartEmpty.classList.remove("hidden");
+    rowProduct.classList.add("hidden");
+    cartTotal.classList.add("hidden");
+  } else {
+    cartEmpty.classList.add("hidden");
+    rowProduct.classList.remove("hidden");
+    cartTotal.classList.remove("hidden");
+  }
 
+  
+  rowProduct.innerHTML = "";
 
-// let total = carrito.reduce((accum, p) => {
-//     return accum + p.precio
-// }, 0)
+  let total = 0;
+  let totalOfProducts = 0;
 
-// console.log()
+  allProducts.forEach((product) => {
+    const containerProduct = document.createElement("div");
+    containerProduct.classList.add("cart-product");
 
-const direccion = document.querySelector(".direccion")
+    containerProduct.innerHTML = `
+            <div class="info-cart-product">
+                <span class="cantidad-producto-carrito">${product.quantity}</span>
+                <p class="titulo-producto-carrito">${product.title}</p>
+                <span class="precio-producto-carrito">${product.price}</span>
+            </div>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="icon-close"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                />
+            </svg>
+        `;
 
-const nuevaCard = document.createElement(`div`)
+    rowProduct.append(containerProduct);
 
-nuevaCard.className += "card direccion"
+    total = total + parseInt(product.quantity * product.price.slice(1));
+    totalOfProducts = totalOfProducts + product.quantity;
+  });
 
-nuevaCard.style.width = "18rem"
-
-nuevaCard.innerHTML = (`<div class="card-body">
-    <h5 class="card-title">MemoriaRam 8ghz</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-        card's
-        content.</p>
-    <a href="#" class="btn btn-primary">Añadir al carrito</a>
-</div>`)
-
-direccion.insertBefore(nuevaCard, direccion[1])
-
-
-// const carrito2 = ["Placa de video RTX2060", "Monitor 144hz", "Teclado RedDragon", "Mouse Logitech"]
-
-// carrito2.push("MemoriaRam 8ghz")
-
-// console.log()
-
-
+  valorTotal.innerText = `${total}`;
+  countProducts.innerText = totalOfProducts;
+};
 
 
 
