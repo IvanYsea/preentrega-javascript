@@ -1,0 +1,20 @@
+[ 
+    {
+        "precio": 400,
+        "titulo": "DISCO SOLIDO SSD PNY 256GB M2 NVME CS1031 1700MB/S",
+        "img": "https://www.venex.com.ar/products_images/1686766993_2.jpg"
+
+    },
+    {
+        "precio": 400,
+        "titulo": "NOTEBOOK GIGABYTE AERO XE5 I7 12700H 16GB SSD 1TB + 1TB RTX 3070TI 16 W11",
+        "img": "https://www.venex.com.ar/products_images/1683294118_5.png"
+
+    },    {
+        "precio": 400,
+        "titulo": "PC AMD RYZEN 5 4600G 8GB SSD 240G",
+        "img": "https://www.venex.com.ar/products_images/1662661172_4600g.jpg"
+
+    }
+
+]

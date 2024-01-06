@@ -7,13 +7,10 @@ btnCart.addEventListener("click", () => {
   containerCartProducts.classList.toggle("hidden-cart");
 });
 
-
 const cartInfo = document.querySelector(".cart-product");
 const rowProduct = document.querySelector(".row-product");
 
-
 const productsList = document.querySelector(".container-items");
-
 
 let allProducts = [];
 
@@ -43,7 +40,7 @@ productsList.addEventListener("click", (e) => {
       position: "left",
       style: {
         background: "#00b09b",
-      }
+      },
     }).showToast();
 
     const infoProduct = {
@@ -71,13 +68,39 @@ productsList.addEventListener("click", (e) => {
     }
 
     showHTML();
-    localStorage.setItem("Usuario", JSON.stringify(allProducts) )
+
+    localStorage.setItem("Usuario", JSON.stringify(allProducts));
   }
 });
 
+fetch(`product.json`)
+  .then((response) => response.json())
+  .then((data) => {
+    data.forEach(obj => {
+
+      const containerProduct = document.createElement("div");
+      containerProduct.classList.add("item");
+     const containerItems = document.querySelector (".container-items")      
+     containerProduct.innerHTML =` 
+        <figure>
+          <img
+            src="${obj.img}"
+            alt="producto"
+          />
+        </figure>
+        <div class="info-product">
+          <h2>${obj.titulo}</h2>
+          <p class="price">$${obj.precio}</p>
+          <button class="btn-add-cart">Añadir al carrito</button>
+        </div>`
+        return containerItems.appendChild(containerProduct)
+    })
+  });
+
+
+
 rowProduct.addEventListener("click", (e) => {
   if (e.target.classList.contains("icon-close")) {
-
     const product = e.target.parentElement;
     const title = product.querySelector("p").textContent;
 
@@ -90,7 +113,7 @@ rowProduct.addEventListener("click", (e) => {
       position: "left",
       style: {
         background: "red",
-      }
+      },
     }).showToast();
 
     console.log(allProducts);
@@ -98,7 +121,6 @@ rowProduct.addEventListener("click", (e) => {
     showHTML();
   }
 });
-
 
 const showHTML = () => {
   if (!allProducts.length) {
@@ -111,7 +133,6 @@ const showHTML = () => {
     cartTotal.classList.remove("hidden");
   }
 
-  
   rowProduct.innerHTML = "";
 
   let total = 0;
@@ -120,6 +141,7 @@ const showHTML = () => {
   allProducts.forEach((product) => {
     const containerProduct = document.createElement("div");
     containerProduct.classList.add("cart-product");
+    console.log(product)
 
     containerProduct.innerHTML = `
             <div class="info-cart-product">
@@ -152,12 +174,3 @@ const showHTML = () => {
   valorTotal.innerText = `${total}`;
   countProducts.innerText = totalOfProducts;
 };
-
-
-
-
-
-
-
-
-
